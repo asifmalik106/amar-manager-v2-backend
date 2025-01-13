@@ -31,8 +31,8 @@ class ProductCategory
         let categoryModel = new CategoryModel();
         let count = await categoryModel.count();
         let newCategory = {
-            pk: "ProductCategory#"+count,
-            sk: "ProductCategory#"+count,
+            primary_key: "ProductCategory#"+count,
+            sort_key: "ProductCategory#"+count,
             categoryName: this.#categoryName,
             categoryUnit: this.#categoryUnit
         };
