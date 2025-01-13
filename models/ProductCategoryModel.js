@@ -11,6 +11,10 @@ class TestModel
     {
         await this.dbInstance.create(data, this.databaseNameRef);
     }
+
+    async count(){
+        await this.dbInstance.countAndIncrement("productCategory");
+    }
     async readAll()
     {
         return await this.dbInstance.getAllData(this.databaseNameRef);

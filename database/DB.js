@@ -77,7 +77,8 @@ class DB {
         };
 
         try {
-            await this.dynamoDb.put(params).promise();
+           let result = await this.dynamoDb.put(params).promise();
+           return result;
         } catch (error) {
             throw error;
         }
@@ -157,6 +158,35 @@ class DB {
             throw error;
         }
     }
+
+    async countAndIncrement(itemName) {
+        const params = {
+          TableName: tableName,
+          Key: {
+            primary_key: 'metadata',
+            sort_key: itemName
+          },
+          UpdateExpression: 'SET #count = if_not_exists(#count, :start) + :inc',
+          ExpressionAttributeNames: {
+            '#count': 'count'
+          },
+          ExpressionAttributeValues: {
+            ':start': 0,
+            ':inc': 1
+          },
+          ReturnValues: 'UPDATED_NEW'
+        };
+      
+        try {
+          const result = await dynamodb.update(params).promise();
+          console.log(`Updated customer count: ${result.Attributes.count}`);
+          return result.Attributes.count;
+        } catch (error) {
+          console.error('Error incrementing customer count:', error);
+          throw error;
+        }
+      }
+
 }
 
 module.exports = DB;
