@@ -46,7 +46,7 @@ module.exports = class TestController {
       await newTest.create();
       return res.status(201).json({ status: "success", msg: "Test added successfully"});
     } catch (error) {
-      res.status(500).json({ status: "error", msg: error });
+      res.status(500).json({ status: "error", msg: error.toString() });
     }
   }
 
