@@ -186,7 +186,6 @@ class DB {
           throw error;
         }
       }
-
 }
 
 module.exports = DB;

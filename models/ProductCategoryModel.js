@@ -13,7 +13,7 @@ class ProductCategoryModel
     }
 
     async count(){
-        await this.dbInstance.countAndIncrement("productCategory", this.databaseNameRef);
+        return await this.dbInstance.countAndIncrement("productCategory", this.databaseNameRef);
     }
     async readAll()
     {
