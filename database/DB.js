@@ -159,7 +159,7 @@ class DB {
         }
     }
 
-    async countAndIncrement(itemName) {
+    async countAndIncrement(itemName, tableName) {
         const params = {
           TableName: tableName,
           Key: {
