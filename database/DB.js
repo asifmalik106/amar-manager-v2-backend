@@ -72,7 +72,7 @@ class DB {
     // Create new data entry
     async create(data, tableName) {
         const params = {
-            TableName: "amar-manager-dev",
+            TableName: tableName,
             Item: data
         };
 
@@ -80,7 +80,7 @@ class DB {
            let result = await this.dynamoDb.put(params).promise();
            return result;
         } catch (error) {
-            throw error;
+            throw tableName+" "+error;
         }
     }
 
