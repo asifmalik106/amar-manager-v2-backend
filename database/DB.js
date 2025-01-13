@@ -2,8 +2,8 @@ const AWS = require('aws-sdk');
 
 class DB {
     constructor() {
-        // Initialize the DynamoDB DocumentClient
-        this.dynamoDb = new AWS.DynamoDB.DocumentClient();
+        // Initialize the dynamoDB DocumentClient
+        this.dynamoDB = new AWS.dynamoDB.DocumentClient();
     }
 
     // Get all data from a table
@@ -13,7 +13,7 @@ class DB {
         };
 
         try {
-            const data = await this.dynamoDb.scan(params).promise();
+            const data = await this.dynamoDB.scan(params).promise();
             return data.Items;
         } catch (error) {
             throw error;
@@ -40,7 +40,7 @@ class DB {
         };
 
         try {
-            const data = await this.dynamoDb.query(params).promise();
+            const data = await this.dynamoDB.query(params).promise();
             return data.Items;
         } catch (error) {
             throw error;
@@ -62,7 +62,7 @@ class DB {
         };
 
         try {
-            const data = await this.dynamoDb.query(params).promise();
+            const data = await this.dynamoDB.query(params).promise();
             return data.Items;
         } catch (error) {
             throw error;
@@ -77,7 +77,7 @@ class DB {
         };
 
         try {
-           let result = await this.dynamoDb.put(params).promise();
+           let result = await this.dynamoDB.put(params).promise();
            return result;
         } catch (error) {
             throw TableName+" "+error;
@@ -104,7 +104,7 @@ class DB {
         };
 
         try {
-            const data = await this.dynamoDb.update(params).promise();
+            const data = await this.dynamoDB.update(params).promise();
             return data;
         } catch (error) {
             throw error;
@@ -130,7 +130,7 @@ class DB {
         };
 
         try {
-            const data = await this.dynamoDb.query(params).promise();
+            const data = await this.dynamoDB.query(params).promise();
             if (data.Items.length === 0) {
                 throw new Error('Data not found');
             }
@@ -153,7 +153,7 @@ class DB {
         };
 
         try {
-            await this.dynamoDb.delete(params).promise();
+            await this.dynamoDB.delete(params).promise();
         } catch (error) {
             throw error;
         }
@@ -178,7 +178,7 @@ class DB {
         };
       
         try {
-          const result = await this.dynamodb.update(params).promise();
+          const result = await this.dynamoDB.update(params).promise();
           console.log(`Updated customer count: ${result.Attributes.count}`);
           return result.Attributes.count;
         } catch (error) {
