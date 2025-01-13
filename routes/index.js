@@ -2,13 +2,20 @@ const express = require("express");
 const router = express.Router();
 const TestController = require("../controllers/TestController");
 const authCheck = require("../middleware/authenticateToken")
+const CategoryController = require("../controllers/CategoryController");
 
 // GET route as Hello Test
 router.get("/api/hello",  TestController.hello);
 
-
 // POST route to create a new test
 router.post("/api/test", TestController.createTest);
+
+// GET route as Hello Test
+router.get("/category",  CategoryController.hello);
+
+// POST route to create a new test
+router.post("/category", CategoryController.createCategory);
+
 
 // GET route to retrieve all tests
 router.get("/api/test",authCheck,  TestController.getAllTests);
