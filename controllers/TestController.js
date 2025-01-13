@@ -72,7 +72,7 @@ module.exports = class TestController {
       await test.deleteById(req.params.id);
       res.status(200).json({ status: "success", msg: "Test deleted successfully" });
     } catch (error) {
-      res.status(500).json({ status: "error", msg: error });
+      res.status(500).json({ status: "error", msg: error.toString() });
     }
   }
 };
