@@ -9,14 +9,14 @@ module.exports = class CategoryController {
 
   // Create operation (POST)
   static async createCategory(req, res) {
-    let res;
+    let result;
     try {
       let { categoryName, categoryUnit } = req.body;
       let  newProductCategory = new ProductCategory(categoryName, categoryUnit);
-      res = await newProductCategory.create();
+      result = await newProductCategory.create();
       return res.status(201).json({ status: "success", msg: "Category added successfully"});
     } catch (error) {
-      res.status(500).json({ status: "error", msg: error.toString(), result: res });
+      res.status(500).json({ status: "error", msg: error.toString(), result: result });
     }
   }
 
