@@ -3,7 +3,7 @@ const AWS = require('aws-sdk');
 class DB {
     constructor() {
         // Initialize the dynamoDB DocumentClient
-        this.dynamoDB = new AWS.dynamoDB.DocumentClient();
+        this.dynamoDB = new AWS.DynamoDB.DocumentClient();
     }
 
     // Get all data from a table

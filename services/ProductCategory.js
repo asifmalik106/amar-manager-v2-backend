@@ -29,8 +29,7 @@ class ProductCategory
     async create()
     {
         let categoryModel = new CategoryModel();
-        let count = 101
-        // let count = await categoryModel.count();
+        let count = await categoryModel.count();
         let newCategory = {
             id: "ProductCategory#"+count,
             categoryName: this.#categoryName,
