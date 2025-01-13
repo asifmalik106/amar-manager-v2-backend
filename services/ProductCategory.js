@@ -37,26 +37,6 @@ class ProductCategory
         };
         await categoryModel.create(newCategory);
     }
-    static async getAllTest()
-    {
-        let testModel = new TestModel();
-        return await testModel.readAll();
-    }
-    async getTestById(testId)
-    {
-        let testModel = new TestModel();
-        return await testModel.readById(testId);
-    }
-    async updateTestById(testId, updateData)
-    {
-        let testModel = new TestModel();
-        await testModel.updateById(testId, updateData);
-    }
-    async deleteById(testId)
-    {
-        let testModel = new TestModel();
-        await testModel.deleteById(testId);
-    }
 }
 
-module.exports = Test;
+module.exports = ProductCategory;
