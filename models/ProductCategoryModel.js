@@ -1,6 +1,6 @@
 let DB = require('../database/DB');
 
-class TestModel 
+class ProductCategoryModel 
 {
     databaseNameRef = 'amar-manager-dev';
     constructor()
@@ -33,4 +33,4 @@ class TestModel
     }
 }
 
-module.exports = TestModel;
+module.exports = ProductCategoryModel;
