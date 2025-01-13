@@ -15,7 +15,7 @@ module.exports = class CategoryController {
       await newProductCategory.create();
       return res.status(201).json({ status: "success", msg: "Category added successfully"});
     } catch (error) {
-      res.status(500).json({ status: "error", msg: error });
+      res.status(500).json({ status: "error", msg: error.toString() });
     }
   }
 
