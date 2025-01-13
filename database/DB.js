@@ -178,7 +178,7 @@ class DB {
         };
       
         try {
-          const result = await dynamodb.update(params).promise();
+          const result = await this.dynamodb.update(params).promise();
           console.log(`Updated customer count: ${result.Attributes.count}`);
           return result.Attributes.count;
         } catch (error) {
