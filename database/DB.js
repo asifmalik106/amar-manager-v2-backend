@@ -72,7 +72,7 @@ class DB {
     // Create new data entry
     async create(data, tableName) {
         const params = {
-            TableName: tableName,
+            TableName: ":tableName",
             Item: data
         };
 
