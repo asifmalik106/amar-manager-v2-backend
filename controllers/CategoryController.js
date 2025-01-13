@@ -1,4 +1,4 @@
-let Test = require("../services/ProductCategory");
+let ProductCategory = require("../services/ProductCategory");
 let { getLanguage, getMessage } = require("../config/language");
 module.exports = class CategoryController {
   
