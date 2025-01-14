@@ -73,7 +73,8 @@ class DB {
     async create(data, TableName) {
         const params = {
             TableName: TableName,
-            Item: data
+            Item: data,
+            ConditionExpression: 'attribute_not_exists(data.categoryName)'
         };
 
         try {
