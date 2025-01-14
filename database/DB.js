@@ -74,7 +74,7 @@ class DB {
         const params = {
             TableName: TableName,
             Item: data,
-            ConditionExpression: 'attribute_not_exists(data.categoryName)'
+            ConditionExpression: 'attribute_not_exists('+data.categoryName+')'
         };
 
         try {
