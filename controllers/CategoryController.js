@@ -14,6 +14,18 @@ module.exports = class CategoryController {
     try {
       let { categoryName, categoryUnit } = req.body;
       let  newProductCategory = new ProductCategory(categoryName, categoryUnit);
+
+      if (!categoryName || !categoryUnit) {
+        let msg = "Failed to Add New Category.";
+        if(!categoryName){
+          msg+= "\nCategory Name is Required"
+        }
+        if(!categoryUnit){
+          msg+= "\nCategory Unit is Required"
+        }
+        return Response.badRequest(res, msg, "Validation Error");
+      }
+
       result = await newProductCategory.create();
       // return res.status(201).json({ status: "success", msg: "Category added successfully"});
       return Response.success(res, "Category added successfully!! Woo Hoo...", result);
