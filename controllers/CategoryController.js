@@ -1,5 +1,6 @@
 let ProductCategory = require("../services/ProductCategory");
 let { getLanguage, getMessage } = require("../config/language");
+let Response = require("../services/Response");
 module.exports = class CategoryController {
   
     // Read operation (GET all tests)
@@ -14,7 +15,8 @@ module.exports = class CategoryController {
       let { categoryName, categoryUnit } = req.body;
       let  newProductCategory = new ProductCategory(categoryName, categoryUnit);
       result = await newProductCategory.create();
-      return res.status(201).json({ status: "success", msg: "Category added successfully"});
+      // return res.status(201).json({ status: "success", msg: "Category added successfully"});
+      return Response.success(res, "Category added successfully!! Woo Hoo...", result);
     } catch (error) {
       res.status(500).json({ status: "error", msg: error.toString(), result: result });
     }

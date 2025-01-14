@@ -30,7 +30,6 @@ class ProductCategory
     {
         let categoryModel = new CategoryModel();
         let count = await categoryModel.count();
-        throw count;
         let newCategory = {
             primary_key: "ProductCategory#"+count,
             sort_key: "ProductCategory#"+count,
