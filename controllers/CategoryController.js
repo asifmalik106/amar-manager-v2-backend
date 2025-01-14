@@ -16,12 +16,12 @@ module.exports = class CategoryController {
       let  newProductCategory = new ProductCategory(categoryName, categoryUnit);
 
       if (!categoryName || !categoryUnit) {
-        let msg = "Failed to Add New Category.";
+        let msg = "Failed to Add New Category. ";
         if(!categoryName){
-          msg+= "\nCategory Name is Required"
+          msg+= "Category Name is Required. "
         }
         if(!categoryUnit){
-          msg+= "\nCategory Unit is Required"
+          msg+= "Category Unit is Required. "
         }
         return Response.badRequest(res, msg, "Validation Error");
       }
