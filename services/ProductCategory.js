@@ -40,8 +40,7 @@ class ProductCategory
             categoryName: this.#categoryName,
             categoryUnit: this.#categoryUnit
         };
-        await categoryModel.create(newCategory);
-        return sameCount;
+        return await categoryModel.create(newCategory);
     }
 }
 
