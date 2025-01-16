@@ -91,7 +91,7 @@ class DB {
         const checkParams = {
           TableName: tableName,
           IndexName: indexName, // GSI name
-          KeyConditionExpression: '\''+data.attribute +'= :data',
+          KeyConditionExpression: data.attribute +'= :data',
           ExpressionAttributeValues: {
             ':data': data.value
           }
