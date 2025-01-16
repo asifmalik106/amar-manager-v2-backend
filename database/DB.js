@@ -116,7 +116,7 @@ class DB {
         };
     
         try {
-        const result = await dynamoDB.query(params).promise();
+        const result = await this.dynamoDB.query(params).promise();
         return result
         }catch (error){
             throw error
