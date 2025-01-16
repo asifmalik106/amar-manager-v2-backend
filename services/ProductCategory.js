@@ -30,6 +30,7 @@ class ProductCategory
     {
         let categoryModel = new CategoryModel();
         let count = await categoryModel.count();
+        let sameCount = await categoryModel.count({attribute: categoryName, value: this.#categoryName},"categoryName-index")
         let newCategory = {
             primary_key: "ProductCategory#"+count,
             sort_key: "ProductCategory#"+count,
@@ -37,6 +38,7 @@ class ProductCategory
             categoryUnit: this.#categoryUnit
         };
         await categoryModel.create(newCategory);
+        return sameCount;
     }
 }
 

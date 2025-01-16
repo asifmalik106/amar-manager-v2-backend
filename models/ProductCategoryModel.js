@@ -12,6 +12,10 @@ class ProductCategoryModel
         await this.dbInstance.create(data, this.databaseNameRef);
     }
 
+    async count(data, indexName){
+        return await this.dbInstance.count(data,this.databaseNameRef, indexName)
+    }
+
     async count(){
         return await this.dbInstance.countAndIncrement("productCategory", this.databaseNameRef);
     }

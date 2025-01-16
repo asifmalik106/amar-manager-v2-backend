@@ -85,6 +85,26 @@ class DB {
         }
     }
 
+    async count(data, tableName, indexName){
+
+        // Query the GSI to check for uniqueness
+        const checkParams = {
+          TableName: tableName,
+          IndexName: indexName, // GSI name
+          KeyConditionExpression: '\''+data.attribute +'= :data',
+          ExpressionAttributeValues: {
+            ':data': data.value
+          }
+        };
+      
+        try {
+            let result = await this.dynamoDB.query(params).promise();
+            return result.Count;
+         } catch (error) {
+             throw error;
+         }
+    }
+
     // Update data by ID
     async update(dataId, updateData, tableName) {
         if (!dataId) {
