@@ -30,6 +30,10 @@ module.exports = class CategoryController {
       // return res.status(201).json({ status: "success", msg: "Category added successfully"});
       return Response.success(res, "Category added successfully!! Woo Hoo...", result);
     } catch (error) {
+      if(error=="Duplicate Entry"){
+      return Response.conflict(res, "Same Category Already Exists!", error);
+
+      }
       res.status(500).json({ status: "error", msg: error.toString(), result: result });
     }
   }
