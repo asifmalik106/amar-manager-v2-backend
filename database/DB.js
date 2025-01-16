@@ -104,7 +104,7 @@ class DB {
         }
     }
 
-    
+
     // Get All Entities
     async getAllEntities(tableName, entityPrefix) {
         const params = {
@@ -116,7 +116,7 @@ class DB {
         };
     
         try {
-        const result = await dynamodb.query(params).promise();
+        const result = await dynamoDB.query(params).promise();
         return result
         }catch (error){
             throw error
