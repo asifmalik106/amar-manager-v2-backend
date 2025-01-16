@@ -96,7 +96,8 @@ class DB {
             ':data': data.value
           }
         };
-      
+      console.log("KeyConditionExpression"+checkParams.KeyConditionExpression)
+      console.log("ExpressionAttributeValues"+checkParams.ExpressionAttributeValues)
         try {
             let result = await this.dynamoDB.query(params).promise();
             return result.Count;
