@@ -46,7 +46,7 @@ class ProductCategory
 
     static async getAll(){
         let categoryModel = new CategoryModel();
-        let result = await categoryModel.getAll(this.entityPrefix);
+        let result = await categoryModel.getAll("ProductCategory#");
         return result;
     }
 }
