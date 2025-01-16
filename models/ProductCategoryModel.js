@@ -12,7 +12,7 @@ class ProductCategoryModel
         await this.dbInstance.create(data, this.databaseNameRef);
     }
 
-    async count(data, indexName){
+    async countDuplicate(data, indexName){
         return await this.dbInstance.count(data,this.databaseNameRef, indexName)
     }
 
