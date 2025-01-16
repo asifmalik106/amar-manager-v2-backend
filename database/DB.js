@@ -96,14 +96,31 @@ class DB {
             ':data': data.value
           }
         };
-      console.log("KeyConditionExpression"+checkParams.KeyConditionExpression)
-      console.log("ExpressionAttributeValues"+checkParams.ExpressionAttributeValues)
         try {
             let result = await this.dynamoDB.query(checkParams).promise();
             return result.Count;
          } catch (error) {
              throw error;
-         }
+        }
+    }
+
+    
+    // Get All Entities
+    async getAllEntities(tableName, entityPrefix) {
+        const params = {
+        TableName: tableName,
+        KeyConditionExpression: 'begins_with(primary_key, :prefix)',
+        ExpressionAttributeValues: {
+            ':prefix': entityPrefix
+        }
+        };
+    
+        try {
+        const result = await dynamodb.query(params).promise();
+        return result
+        }catch (error){
+            throw error
+        }
     }
 
     // Update data by ID

@@ -38,4 +38,14 @@ module.exports = class CategoryController {
     }
   }
 
+  // Read All operation (GET)
+  static async getAllCategories(req,res){
+    const result = await ProductCategory.getAll();
+    try{
+      Response.success(res, "Category Retrieve Successful!", result)
+    }catch(error){
+      Response.badRequest(res,"Something Went Wrong!", error)
+    }
+  }
+
 };

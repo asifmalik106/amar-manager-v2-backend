@@ -19,9 +19,9 @@ class ProductCategoryModel
     async count(){
         return await this.dbInstance.countAndIncrement("productCategory", this.databaseNameRef);
     }
-    async readAll()
+    async getAll(entityPrefix)
     {
-        return await this.dbInstance.getAllData(this.databaseNameRef);
+        return await this.dbInstance.getAllEntities(this.databaseNameRef, entityPrefix)
     }
     async readById(testId)
     {

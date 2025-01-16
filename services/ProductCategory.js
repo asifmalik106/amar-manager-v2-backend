@@ -2,6 +2,7 @@ let CategoryModel = require("../models/ProductCategoryModel");
 let uuid = require("uuid");
 class ProductCategory 
 {
+    entityPrefix = "ProductCategory"
     #categoryName;
     #categoryUnit;
     constructor(categoryName, categoryUnit)
@@ -41,6 +42,12 @@ class ProductCategory
             categoryUnit: this.#categoryUnit
         };
         return await categoryModel.create(newCategory);
+    }
+
+    static async getAll(){
+        let categoryModel = new CategoryModel();
+        let result = await categoryModel.getAll(this.entityPrefix);
+        return result;
     }
 }
 
