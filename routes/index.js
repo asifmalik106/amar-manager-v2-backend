@@ -11,7 +11,7 @@ router.get("/api/hello",  TestController.hello);
 router.post("/api/test", TestController.createTest);
 
 // GET route as Hello Test
-router.get("/category",  CategoryController.hello);
+router.get("/category",  CategoryController.getAllCategories);
 
 // POST route to create a new test
 router.post("/category", CategoryController.createCategory);
