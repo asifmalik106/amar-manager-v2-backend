@@ -30,7 +30,7 @@ class ProductCategory
     {
         let categoryModel = new CategoryModel();
         let count = await categoryModel.count();
-        let sameCount = await categoryModel.countAndIncrement({attribute: "categoryName", value: this.#categoryName},"categoryName-index")
+        let sameCount = await categoryModel.countDuplicate({attribute: "categoryName", value: this.#categoryName},"categoryName-index")
         let newCategory = {
             primary_key: "ProductCategory#"+count,
             sort_key: "ProductCategory#"+count,
