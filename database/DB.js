@@ -99,7 +99,7 @@ class DB {
       console.log("KeyConditionExpression"+checkParams.KeyConditionExpression)
       console.log("ExpressionAttributeValues"+checkParams.ExpressionAttributeValues)
         try {
-            let result = await this.dynamoDB.query(params).promise();
+            let result = await this.dynamoDB.query(checkParams).promise();
             return result.Count;
          } catch (error) {
              throw error;
