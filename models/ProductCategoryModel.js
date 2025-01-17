@@ -26,7 +26,7 @@ class ProductCategoryModel
     }
     async getProductCategoryByID(entityID)
     {
-        return await this.dbInstance.getEntityByID(this.databaseNameRef, this.entityName, entityID)
+        return await this.dbInstance.getEntityByID(this.databaseNameRef, this.entityName, this.entityName+'#'+entityID)
     }
     async updateById(testId, updateData)
     {
