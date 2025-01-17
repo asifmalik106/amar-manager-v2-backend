@@ -99,7 +99,7 @@ class DB {
               ':data': data.value // Map the value
             }
           };
-
+        console.log("GSI: "+checkParams.IndexName)
         console.log("KeyConditionExpression "+checkParams.KeyConditionExpression)
         console.log("ExpressionAttributeNames "+JSON.stringify(checkParams.ExpressionAttributeNames))
         console.log("ExpressionAttributeValues "+JSON.stringify(checkParams.ExpressionAttributeValues))
