@@ -93,10 +93,10 @@ class DB {
             IndexName: indexName, // GSI name
             KeyConditionExpression: '#attr = :data',
             ExpressionAttributeNames: {
-              '#attr': data.attribute // Map the attribute name
+              '#attr': 'categoryName' // Map the attribute name
             },
             ExpressionAttributeValues: {
-              ':data': data.value // Map the value
+              ':data': 'LED Bulb' // Map the value
             }
           };
         console.log("GSI: "+checkParams.IndexName)
