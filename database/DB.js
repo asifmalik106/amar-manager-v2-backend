@@ -74,7 +74,10 @@ class DB {
         const params = {
             TableName: TableName,
             Item: data,
-            ConditionExpression: 'attribute_not_exists('+data.categoryName+')'
+            ConditionExpression: 'attribute_not_exists(#attrName)', // Reference a placeholder
+            ExpressionAttributeNames: {
+                '#attrName': 'categoryName' // Map placeholder to the attribute name
+            }
         };
 
         try {
@@ -93,10 +96,10 @@ class DB {
             IndexName: indexName, // GSI name
             KeyConditionExpression: '#attr = :data',
             ExpressionAttributeNames: {
-              '#attr': 'categoryName' // Map the attribute name
+              '#attr': data.attribute // Map the attribute name
             },
             ExpressionAttributeValues: {
-              ':data': 'LED Bulb' // Map the value
+              ':data': data.value // Map the value
             }
           };
         console.log("GSI: "+checkParams.IndexName)
