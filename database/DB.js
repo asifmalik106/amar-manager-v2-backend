@@ -129,6 +129,25 @@ class DB {
         }
     }
 
+    // Get Single Entity By ID
+    async getEntityByID(tableName, entityName, entityID) {
+        const params = {
+            TableName: tableName,
+            KeyConditionExpression: 'primary_key = :entityName and sort_key = :entityID',
+            ExpressionAttributeValues: {
+                ':entityName': entityName,
+                ':entityID': entityID
+            }
+        };
+    
+        try {
+            const result = await this.dynamoDB.query(params).promise();
+            return result
+        }catch (error){
+            throw error
+        }
+    }
+
     // Update data by ID
     async update(dataId, updateData, tableName) {
         if (!dataId) {

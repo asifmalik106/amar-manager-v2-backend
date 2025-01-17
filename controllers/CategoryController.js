@@ -48,4 +48,16 @@ module.exports = class CategoryController {
     }
   }
 
+    // Read Single ProductCategory by ID (GET)
+    static async getProductCategoryByID(req,res){
+      let categoryID = req.params.categoryID;
+      let category = new ProductCategory();
+      let result = await category.getProductCategoryByID(categoryID)
+      try{
+        Response.success(res, "Category Retrieve Successful!", result)
+      }catch(error){
+        Response.badRequest(res,"Something Went Wrong!", error)
+      }
+    }
+
 };

@@ -10,6 +10,9 @@ class ProductCategory
         this.#categoryName = categoryName;
         this.#categoryUnit = categoryUnit;
     }
+    constructor(){
+
+    }
     get categoryName()
     {
         return this.#categoryName;
@@ -46,8 +49,14 @@ class ProductCategory
 
     static async getAll(){
         let categoryModel = new CategoryModel();
-        let result = await categoryModel.getAll("ProductCategory");
+        let result = await categoryModel.getAll();
         return result;
+    }
+
+    async getProductCategoryByID(productCategoryID){
+        let categoryModel = new CategoryModel();
+        let category = categoryModel.getProductCategoryByID(productCategoryID);
+        return category;
     }
 }
 

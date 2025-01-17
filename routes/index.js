@@ -10,12 +10,14 @@ router.get("/api/hello",  TestController.hello);
 // POST route to create a new test
 router.post("/api/test", TestController.createTest);
 
-// GET route as Hello Test
+// GET All Categories
 router.get("/category",  CategoryController.getAllCategories);
 
 // POST route to create a new test
 router.post("/category", CategoryController.createCategory);
 
+// GET Single Category Data
+router.get("/category/:categoryID", CategoryController.getProductCategoryByID);
 
 // GET route to retrieve all tests
 router.get("/api/test",authCheck,  TestController.getAllTests);
