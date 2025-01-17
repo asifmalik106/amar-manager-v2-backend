@@ -89,15 +89,20 @@ class DB {
 
         // Query the GSI to check for uniqueness
         const checkParams = {
-          TableName: tableName,
-          IndexName: indexName, // GSI name
-          KeyConditionExpression: data.attribute +'= :data',
-          ExpressionAttributeValues: {
-            ':data': data.value
-          }
-        };
+            TableName: tableName,
+            IndexName: indexName, // GSI name
+            KeyConditionExpression: '#attr = :data',
+            ExpressionAttributeNames: {
+              '#attr': data.attribute // Map the attribute name
+            },
+            ExpressionAttributeValues: {
+              ':data': data.value // Map the value
+            }
+          };
+
         console.log("KeyConditionExpression "+checkParams.KeyConditionExpression)
-        console.log("KeyConditionExpression "+JSON.stringify(checkParams.ExpressionAttributeValues))
+        console.log("ExpressionAttributeNames "+JSON.stringify(checkParams.ExpressionAttributeNames))
+        console.log("ExpressionAttributeValues "+JSON.stringify(checkParams.ExpressionAttributeValues))
         try {
             let result = await this.dynamoDB.query(checkParams).promise();
             return result.Count;
