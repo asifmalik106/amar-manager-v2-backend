@@ -96,6 +96,8 @@ class DB {
             ':data': data.value
           }
         };
+        console.log("KeyConditionExpression "+checkParams.KeyConditionExpression)
+        console.log("KeyConditionExpression "+JSON.stringify(checkParams.ExpressionAttributeValues))
         try {
             let result = await this.dynamoDB.query(checkParams).promise();
             return result.Count;
@@ -108,11 +110,11 @@ class DB {
     // Get All Entities
     async getAllEntities(tableName, entityPrefix) {
         const params = {
-        TableName: tableName,
-        KeyConditionExpression: 'begins_with(primary_key, :prefix)',
-        ExpressionAttributeValues: {
-            ':prefix': entityPrefix
-        }
+            TableName: tableName,
+            KeyConditionExpression: 'begins_with(primary_key, :prefix)',
+            ExpressionAttributeValues: {
+                ':prefix': entityPrefix
+            }
         };
     
         try {
