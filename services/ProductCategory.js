@@ -10,9 +10,6 @@ class ProductCategory
         this.#categoryName = categoryName;
         this.#categoryUnit = categoryUnit;
     }
-    constructor(){
-
-    }
     get categoryName()
     {
         return this.#categoryName;
