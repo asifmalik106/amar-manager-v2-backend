@@ -112,12 +112,12 @@ class DB {
 
 
     // Get All Entities
-    async getAllEntities(tableName, entityPrefix) {
+    async getAllEntities(tableName, entityName) {
         const params = {
             TableName: tableName,
-            KeyConditionExpression: 'begins_with(sort_key, :prefix)',
+            KeyConditionExpression: 'primary_key = :entityName',
             ExpressionAttributeValues: {
-                ':prefix': entityPrefix
+                ':entityName': entityName
             }
         };
     

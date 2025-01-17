@@ -36,7 +36,7 @@ class ProductCategory
             throw "Duplicate Entry"
         }
         let newCategory = {
-            primary_key: "ProductCategory#"+count,
+            primary_key: "ProductCategory",
             sort_key: "ProductCategory#"+count,
             categoryName: this.#categoryName,
             categoryUnit: this.#categoryUnit
