@@ -102,10 +102,6 @@ class DB {
               ':data': data.value // Map the value
             }
           };
-        console.log("GSI: "+checkParams.IndexName)
-        console.log("KeyConditionExpression "+checkParams.KeyConditionExpression)
-        console.log("ExpressionAttributeNames "+JSON.stringify(checkParams.ExpressionAttributeNames))
-        console.log("ExpressionAttributeValues "+JSON.stringify(checkParams.ExpressionAttributeValues))
         try {
             let result = await this.dynamoDB.query(checkParams).promise();
             return result.Count;
@@ -119,7 +115,7 @@ class DB {
     async getAllEntities(tableName, entityPrefix) {
         const params = {
             TableName: tableName,
-            KeyConditionExpression: 'begins_with(primary_key, :prefix)',
+            KeyConditionExpression: 'begins_with(sort_key, :prefix)',
             ExpressionAttributeValues: {
                 ':prefix': entityPrefix
             }
