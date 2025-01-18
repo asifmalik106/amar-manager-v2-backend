@@ -61,6 +61,7 @@ module.exports = class CategoryController {
           return Response.conflict(res, "Category Does Not Exists!", error);
         }
         console.log(error)
+        console.log(typeof error)
         Response.badRequest(res,"Something Went Wrong!", JSON.stringify(error))
       }
     }
