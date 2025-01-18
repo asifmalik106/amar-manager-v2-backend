@@ -52,7 +52,7 @@ class ProductCategory
 
     async getProductCategoryByID(productCategoryID){
         let categoryModel = new CategoryModel();
-        let category = categoryModel.getProductCategoryByID(productCategoryID);
+        let category = await categoryModel.getProductCategoryByID(productCategoryID);
         throw category
         if(category.data.Count==0){
             throw "Wrong Category ID";
