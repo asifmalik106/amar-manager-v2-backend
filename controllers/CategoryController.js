@@ -31,8 +31,7 @@ module.exports = class CategoryController {
       return Response.success(res, "Category added successfully!! Woo Hoo...", result);
     } catch (error) {
       if(error=="Duplicate Entry"){
-      return Response.conflict(res, "Same Category Already Exists!", error);
-
+        return Response.conflict(res, "Same Category Already Exists!", error);
       }
       res.status(500).json({ status: "error", msg: error.toString(), result: result });
     }
@@ -52,10 +51,15 @@ module.exports = class CategoryController {
     static async getProductCategoryByID(req,res){
       let categoryID = req.params.categoryID;
       let category = new ProductCategory;
-      let result = await category.getProductCategoryByID(categoryID)
+      let result;
       try{
-        Response.success(res, "Category Retrieve Successful!", result)
+        result = await category.getProductCategoryByID(categoryID)
+
+        return Response.success(res, "Category Retrieve Successful!", result)
       }catch(error){
+        if(error=="Wrong Category ID"){
+          return Response.conflict(res, "Category Does Not Exists!", error);
+        }
         Response.badRequest(res,"Something Went Wrong!", error)
       }
     }
