@@ -60,6 +60,7 @@ module.exports = class CategoryController {
         if(error=="Wrong Category ID"){
           return Response.conflict(res, "Category Does Not Exists!", error);
         }
+        console.log(error)
         Response.badRequest(res,"Something Went Wrong!", JSON.stringify(error))
       }
     }
