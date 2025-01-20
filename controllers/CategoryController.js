@@ -44,8 +44,8 @@ module.exports = class CategoryController {
       try {
         let { key, categoryName, categoryUnit } = req.body;
         let productCategory = new ProductCategory;
-        productCategory.categoryName(categoryName);
-        productCategory.categoryUnit(categoryUnit);  
+        productCategory.categoryName = categoryName;
+        productCategory.categoryUnit = categoryUnit;  
         // let  newProductCategory = new ProductCategory(categoryName, categoryUnit);
   
         if (!categoryName || !categoryUnit) {
