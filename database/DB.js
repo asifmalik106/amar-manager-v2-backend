@@ -74,10 +74,6 @@ class DB {
         const params = {
             TableName: TableName,
             Item: data,
-            ConditionExpression: 'attribute_not_exists(#attrName)', // Reference a placeholder
-            ExpressionAttributeNames: {
-                '#attrName': 'categoryName' // Map placeholder to the attribute name
-            }
         };
 
         try {
