@@ -66,6 +66,7 @@ class ProductCategory
         if(sameCount>0){
             throw "Duplicate Entry"
         }
+        console.log("ProductCategory:" + this.#categoryName + " " + this.#categoryUnit)
         let updateCategory = {
             primary_key: "ProductCategory",
             sort_key: "ProductCategory#"+key,

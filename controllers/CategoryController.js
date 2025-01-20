@@ -56,7 +56,7 @@ module.exports = class CategoryController {
           }
           return Response.badRequest(res, msg, "Validation Error");
         }
-  
+        console.log('before update()')
         result = await productCategory.update(key);
         // return res.status(201).json({ status: "success", msg: "Category added successfully"});
         return Response.success(res, "Category Updated successfully!! Woo Hoo...", result);
