@@ -170,7 +170,7 @@ class DB {
         let eav;
         updateData.data.forEach(element => {
             updateExpression+= element.name + ' = :'+element.name+', '
-            eav[element.name] = element.value
+            eav[`:${element.name}`] = element.value
         });
         console.log("##########################################################################################################");
         console.log(updateExpression)
