@@ -43,11 +43,8 @@ module.exports = class CategoryController {
       
       try {
         let { key, categoryName, categoryUnit } = req.body;
-        let productCategory = new ProductCategory;
-        productCategory.categoryName = categoryName;
-        productCategory.categoryUnit = categoryUnit;  
-        // let  newProductCategory = new ProductCategory(categoryName, categoryUnit);
-  
+        let productCategory = new ProductCategory(categoryName, categoryUnit);
+
         if (!categoryName || !categoryUnit) {
           let msg = "Failed to Update Category. ";
           if(!categoryName){
