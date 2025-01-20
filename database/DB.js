@@ -165,38 +165,49 @@ class DB {
             ]
         }
     */
-    async updateEntity(tableName, updateData) {
-        let updateExpression = 'SET ';
-        let eav;
-        updateData.data.forEach(element => {
-            updateExpression+= element.name + ' = :'+element.name+', '
-            eav[`:${element.name}`] = element.value
-        });
-        console.log("##########################################################################################################");
-        console.log(updateExpression)
-        console.log("----------------------------------------------------------------------------------------------------------")
-        console.log(eav)
-        console.log("##########################################################################################################");
-        const params = {
-            TableName: tableName,
-            Key: {
-                primary_key: updateData.primary_key, // Partition Key
-                sort_key: updateData.sort_key         // Sort Key (e.g., 'Category#001')
-            },
-            UpdateExpression: updateExpression,
-            ExpressionAttributeValues: eav,
-            ReturnValues: 'UPDATED_NEW' // Returns the updated attributes
-        };
-    
-        try {
-            const result = await dynamodb.update(params).promise();
-            console.log(`Category updated successfully:`, result.Attributes);
-            return result.Attributes; // Return updated attributes
-        } catch (error) {
-            console.error('Error updating category:', error);
-            throw error;
+        async updateEntity(tableName, updateData) {
+            // Initialize update expression and attribute values
+            let updateExpression = 'SET ';
+            let expressionAttributeValues = {};
+            let expressionAttributeNames = {};
+        
+            // Build dynamic update expression and attribute values
+            updateData.data.forEach((item, index) => {
+                const attributePlaceholder = `:value${index}`;
+                const namePlaceholder = `#name${index}`;
+        
+                // Append to update expression
+                updateExpression += `${index > 0 ? ', ' : ''}${namePlaceholder} = ${attributePlaceholder}`;
+        
+                // Add value to expression attribute values
+                expressionAttributeValues[attributePlaceholder] = item.value;
+        
+                // Add attribute name to avoid reserved keyword conflicts
+                expressionAttributeNames[namePlaceholder] = item.name;
+            });
+        
+            const params = {
+                TableName: tableName,
+                Key: {
+                    primary_key: updateData.primary_key, // Partition Key
+                    sort_key: updateData.sort_key         // Sort Key
+                },
+                UpdateExpression: updateExpression,
+                ExpressionAttributeValues: expressionAttributeValues,
+                ExpressionAttributeNames: expressionAttributeNames,
+                ReturnValues: 'UPDATED_NEW' // Returns the updated attributes
+            };
+        
+            try {
+                const result = await this.dynamoDB.update(params).promise();
+                console.log(`Entity updated successfully:`, result.Attributes);
+                return result.Attributes; // Return updated attributes
+            } catch (error) {
+                console.error('Error updating entity:', error);
+                throw error;
+            }
         }
-    }
+        
 
     // Update data by date
     async updateDataByDate(tableName, date, newData) {
