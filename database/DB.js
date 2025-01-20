@@ -167,11 +167,15 @@ class DB {
     */
     async updateEntity(tableName, updateData) {
         let updateExpression = 'SET ';
+        let eav;
         updateData.data.forEach(element => {
-            updateExpression+= element.name + ' = :new'+element.name+', '
+            updateExpression+= element.name + ' = :'+element.name+', '
+            eav[element.name] = element.value
         });
         console.log("##########################################################################################################");
         console.log(updateExpression)
+        console.log("----------------------------------------------------------------------------------------------------------")
+        console.log(eav)
         console.log("##########################################################################################################");
         const params = {
             TableName: tableName,
@@ -179,11 +183,8 @@ class DB {
                 primary_key: updateData.primary_key, // Partition Key
                 sort_key: updateData.sort_key         // Sort Key (e.g., 'Category#001')
             },
-            UpdateExpression: 'SET categoryName = :newName, categoryUnit = :newUnit',
-            ExpressionAttributeValues: {
-                ':newName': newCategoryName,
-                ':newUnit': newCategoryUnit
-            },
+            UpdateExpression: updateExpression,
+            ExpressionAttributeValues: eav,
             ReturnValues: 'UPDATED_NEW' // Returns the updated attributes
         };
     
