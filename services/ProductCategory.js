@@ -58,6 +58,31 @@ class ProductCategory
         }
         return category;
     }
+
+    async update(key)
+    {
+        let categoryModel = new CategoryModel();
+        let sameCount = await categoryModel.countDuplicate({attribute: "categoryName", value: this.#categoryName},"categoryName-index")
+        if(sameCount>0){
+            throw "Duplicate Entry"
+        }
+        let updateCategory = {
+            primary_key: "ProductCategory",
+            sort_key: "ProductCategory#"+key,
+            data: 
+            [
+                {
+                    name: "categoryName",
+                    value: this.#categoryName
+                },
+                {
+                    name: "categoryUnit",
+                    value: this.#categoryUnit
+                }
+            ]
+        }
+        return await categoryModel.update(updateCategory);
+    }
 }
 
 module.exports = ProductCategory;

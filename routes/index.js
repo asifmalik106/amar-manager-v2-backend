@@ -19,6 +19,10 @@ router.post("/category", CategoryController.createCategory);
 // GET Single Category Data
 router.get("/category/:categoryID", CategoryController.getProductCategoryByID);
 
+// Update Single Category Data
+router.put("/category", CategoryController.updateCategory);
+
+
 // GET route to retrieve all tests
 router.get("/api/test",authCheck,  TestController.getAllTests);
 

@@ -37,6 +37,39 @@ module.exports = class CategoryController {
     }
   }
 
+    // Create operation (POST)
+    static async updateCategory(req, res) {
+      let result;
+      
+      try {
+        let { key, categoryName, categoryUnit } = req.body;
+        let productCategory = new ProductCategory;
+        productCategory.categoryName(categoryName);
+        productCategory.categoryUnit(categoryUnit);  
+        // let  newProductCategory = new ProductCategory(categoryName, categoryUnit);
+  
+        if (!categoryName || !categoryUnit) {
+          let msg = "Failed to Update Category. ";
+          if(!categoryName){
+            msg+= "Category Name is Required. "
+          }
+          if(!categoryUnit){
+            msg+= "Category Unit is Required. "
+          }
+          return Response.badRequest(res, msg, "Validation Error");
+        }
+  
+        result = await productCategory.update(key);
+        // return res.status(201).json({ status: "success", msg: "Category added successfully"});
+        return Response.success(res, "Category Updated successfully!! Woo Hoo...", result);
+      } catch (error) {
+        if(error=="Duplicate Entry"){
+          return Response.conflict(res, "Same Category Already Exists!", error);
+        }
+        res.status(500).json({ status: "error", msg: error.toString(), result: result });
+      }
+    }
+
   // Read All operation (GET)
   static async getAllCategories(req,res){
     const result = await ProductCategory.getAll();

@@ -149,28 +149,50 @@ class DB {
     }
 
     // Update data by ID
-    async update(dataId, updateData, tableName) {
-        if (!dataId) {
-            throw new Error('Data ID is required');
+    /*
+        updateData = {
+            "primary_key": PRIMARY_KEY,
+            "sort_key": SORT_KEY,
+            "data":[
+                {
+                    "name": ATTRIBUTE_NAME,
+                    "value": ATTRIBUTE_VALUE
+                },
+                {
+                    "name": ATTRIBUTE_NAME,
+                    "value": ATTRIBUTE_VALUE
+                },
+            ]
         }
-
+    */
+    async updateEntity(tableName, updateData) {
+        let updateExpression = 'SET ';
+        updateData.data.forEach(element => {
+            updateExpression+= element.name + ' = :new'+element.name+', '
+        });
+        console.log("##########################################################################################################");
+        console.log(updateExpression)
+        console.log("##########################################################################################################");
         const params = {
             TableName: tableName,
-            Key: { id: dataId },  // Assuming 'id' is the primary key
-            UpdateExpression: "set #data = :data",
-            ExpressionAttributeNames: {
-                "#data": "data" // replace with the actual fields you want to update
+            Key: {
+                primary_key: updateData.primary_key, // Partition Key
+                sort_key: updateData.sort_key         // Sort Key (e.g., 'Category#001')
             },
+            UpdateExpression: 'SET categoryName = :newName, categoryUnit = :newUnit',
             ExpressionAttributeValues: {
-                ":data": updateData
+                ':newName': newCategoryName,
+                ':newUnit': newCategoryUnit
             },
-            ReturnValues: "UPDATED_NEW"
+            ReturnValues: 'UPDATED_NEW' // Returns the updated attributes
         };
-
+    
         try {
-            const data = await this.dynamoDB.update(params).promise();
-            return data;
+            const result = await dynamodb.update(params).promise();
+            console.log(`Category updated successfully:`, result.Attributes);
+            return result.Attributes; // Return updated attributes
         } catch (error) {
+            console.error('Error updating category:', error);
             throw error;
         }
     }
