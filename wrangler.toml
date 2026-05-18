@@ -23,3 +23,4 @@ binding = "DB"
 database_name = "amar-manager-v2-stage"
 database_id = "94d4b13f-b0b9-4f2b-8b4c-0dc4a20b4868"
 migrations_dir = "migrations"
+
