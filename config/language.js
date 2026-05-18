@@ -1,17 +1,16 @@
-const LANGUAGES = {
-    en: require('../language/en.json'),
-    bn: require('../language/bn.json')
-};
+import en from '../language/en.json' with { type: 'json' };
+import bn from '../language/bn.json' with { type: 'json' };
 
-function getLanguage(headers) {
+const LANGUAGES = { en, bn };
+
+export function getLanguage(headers) {
     const acceptLanguage = (typeof headers.get === 'function'
         ? headers.get('accept-language')
         : headers['accept-language']) || 'en';
-    const languages = acceptLanguage.split(',');
-    return languages[0].trim();
+    return acceptLanguage.split(',')[0].trim();
 }
 
-function getMessage(language, messageKey) {
+export function getMessage(language, messageKey) {
     try {
         const languageData = LANGUAGES[language] || LANGUAGES['en'];
         return languageData[messageKey] || 'Message not found';
@@ -19,5 +18,3 @@ function getMessage(language, messageKey) {
         return 'Error loading language data or accessing message';
     }
 }
-
-module.exports = { getLanguage, getMessage };

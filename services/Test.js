@@ -1,6 +1,6 @@
-let TestModel = require("../models/TestModel");
+import TestModel from '../models/TestModel.js';
 
-class Test {
+export default class Test {
     #db;
     #testName;
     #age;
@@ -17,35 +17,28 @@ class Test {
     set age(value) { this.#age = value; }
 
     async create() {
-        let testModel = new TestModel(this.#db);
-        let testId = crypto.randomUUID();
-        let newTest = {
-            id: testId,
-            testName: this.#testName,
-            age: this.#age
-        };
-        await testModel.create(newTest);
+        const testModel = new TestModel(this.#db);
+        const testId = crypto.randomUUID();
+        await testModel.create({ id: testId, testName: this.#testName, age: this.#age });
     }
 
     static async getAllTest(db) {
-        let testModel = new TestModel(db);
+        const testModel = new TestModel(db);
         return await testModel.readAll();
     }
 
     async getTestById(testId) {
-        let testModel = new TestModel(this.#db);
+        const testModel = new TestModel(this.#db);
         return await testModel.readById(testId);
     }
 
     async updateTestById(testId, updateData) {
-        let testModel = new TestModel(this.#db);
+        const testModel = new TestModel(this.#db);
         await testModel.updateById(testId, updateData);
     }
 
     async deleteById(testId) {
-        let testModel = new TestModel(this.#db);
+        const testModel = new TestModel(this.#db);
         await testModel.deleteById(testId);
     }
 }
-
-module.exports = Test;

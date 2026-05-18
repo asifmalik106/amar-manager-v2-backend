@@ -1,4 +1,4 @@
-class DB {
+export default class DB {
     constructor(d1) {
         this.d1 = d1;
     }
@@ -74,5 +74,3 @@ class DB {
         return await this.updateEntity(tableName, row.id, updates);
     }
 }
-
-module.exports = DB;

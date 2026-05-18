@@ -1,7 +1,7 @@
-let CategoryModel = require("../models/ProductCategoryModel");
+import CategoryModel from '../models/ProductCategoryModel.js';
 
-class ProductCategory {
-    entityPrefix = "ProductCategory";
+export default class ProductCategory {
+    entityPrefix = 'ProductCategory';
     #db;
     #categoryName;
     #categoryUnit;
@@ -18,47 +18,34 @@ class ProductCategory {
     set categoryUnit(value) { this.#categoryUnit = value; }
 
     async create() {
-        let categoryModel = new CategoryModel(this.#db);
-        let sameCount = await categoryModel.countDuplicate({ attribute: "categoryName", value: this.#categoryName });
-        if (sameCount > 0) {
-            throw "Duplicate Entry";
-        }
-        let newCategory = {
-            categoryName: this.#categoryName,
-            categoryUnit: this.#categoryUnit
-        };
-        return await categoryModel.create(newCategory);
+        const categoryModel = new CategoryModel(this.#db);
+        const sameCount = await categoryModel.countDuplicate({ attribute: 'categoryName', value: this.#categoryName });
+        if (sameCount > 0) throw 'Duplicate Entry';
+        return await categoryModel.create({ categoryName: this.#categoryName, categoryUnit: this.#categoryUnit });
     }
 
     static async getAll(db) {
-        let categoryModel = new CategoryModel(db);
+        const categoryModel = new CategoryModel(db);
         return await categoryModel.getAll();
     }
 
     async getProductCategoryByID(productCategoryID) {
-        let categoryModel = new CategoryModel(this.#db);
-        let category = await categoryModel.getProductCategoryByID(productCategoryID);
-        if (!category) {
-            throw "Wrong Category ID";
-        }
+        const categoryModel = new CategoryModel(this.#db);
+        const category = await categoryModel.getProductCategoryByID(productCategoryID);
+        if (!category) throw 'Wrong Category ID';
         return category;
     }
 
     async update(key) {
-        let categoryModel = new CategoryModel(this.#db);
-        let sameCount = await categoryModel.countDuplicate({ attribute: "categoryName", value: this.#categoryName });
-        if (sameCount > 0) {
-            throw "Duplicate Entry";
-        }
-        let updateCategory = {
+        const categoryModel = new CategoryModel(this.#db);
+        const sameCount = await categoryModel.countDuplicate({ attribute: 'categoryName', value: this.#categoryName });
+        if (sameCount > 0) throw 'Duplicate Entry';
+        return await categoryModel.update({
             id: key,
             data: [
-                { name: "categoryName", value: this.#categoryName },
-                { name: "categoryUnit", value: this.#categoryUnit }
+                { name: 'categoryName', value: this.#categoryName },
+                { name: 'categoryUnit', value: this.#categoryUnit }
             ]
-        };
-        return await categoryModel.update(updateCategory);
+        });
     }
 }
-
-module.exports = ProductCategory;

@@ -1,6 +1,6 @@
-let DB = require('../database/DB');
+import DB from '../database/DB.js';
 
-class ProductCategoryModel {
+export default class ProductCategoryModel {
     tableName = 'product_categories';
 
     constructor(db) {
@@ -31,5 +31,3 @@ class ProductCategoryModel {
         await this.dbInstance.deleteById(id, this.tableName);
     }
 }
-
-module.exports = ProductCategoryModel;
