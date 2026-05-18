@@ -1,40 +1,34 @@
 let DB = require('../database/DB');
 
-class ProductCategoryModel 
-{
-    databaseNameRef = 'amar-manager-dev';
-    entityName = 'ProductCategory'
-    constructor()
-    {
-        this.dbInstance = new DB();
-    }
-    async create(data)
-    {
-        await this.dbInstance.create(data, this.databaseNameRef);
+class ProductCategoryModel {
+    tableName = 'product_categories';
+
+    constructor(db) {
+        this.dbInstance = new DB(db);
     }
 
-    async countDuplicate(data, indexName){
-        return await this.dbInstance.count(data,this.databaseNameRef, indexName)
+    async create(data) {
+        return await this.dbInstance.create(data, this.tableName);
     }
 
-    async count(){
-        return await this.dbInstance.countAndIncrement("productCategory", this.databaseNameRef);
+    async countDuplicate(data) {
+        return await this.dbInstance.count(data, this.tableName);
     }
-    async getAll()
-    {
-        return await this.dbInstance.getAllEntities(this.databaseNameRef, this.entityName)
+
+    async getAll() {
+        return await this.dbInstance.getAllEntities(this.tableName);
     }
-    async getProductCategoryByID(entityID)
-    {
-        return await this.dbInstance.getEntityByID(this.databaseNameRef, this.entityName, this.entityName+'#'+entityID)
+
+    async getProductCategoryByID(entityID) {
+        return await this.dbInstance.getEntityByID(this.tableName, entityID);
     }
-    async update(updateData)
-    {
-        await this.dbInstance.updateEntity(this.databaseNameRef, updateData);
+
+    async update(updateData) {
+        return await this.dbInstance.updateEntity(this.tableName, updateData.id, updateData.data);
     }
-    async deleteById(testId)
-    {
-        await this.dbInstance.deleteById(testId, this.databaseNameRef);
+
+    async deleteById(id) {
+        await this.dbInstance.deleteById(id, this.tableName);
     }
 }
 

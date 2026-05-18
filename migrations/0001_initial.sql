@@ -1,0 +1,17 @@
+-- Tests table
+CREATE TABLE IF NOT EXISTS tests (
+    id TEXT PRIMARY KEY,
+    testName TEXT NOT NULL,
+    age INTEGER,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Product Categories table
+CREATE TABLE IF NOT EXISTS product_categories (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    categoryName TEXT NOT NULL UNIQUE,
+    categoryUnit TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);

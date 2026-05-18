@@ -1,0 +1,25 @@
+name = "amar-manager-v2"
+main = "index.js"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "amar-manager-v2"
+database_id = "94d4b13f-b0b9-4f2b-8b4c-0dc4a20b4868"
+migrations_dir = "migrations"
+
+[vars]
+ENVIRONMENT = "production"
+
+[env.staging]
+name = "amar-manager-v2-stage"
+
+[env.staging.vars]
+ENVIRONMENT = "staging"
+
+[[env.staging.d1_databases]]
+binding = "DB"
+database_name = "amar-manager-v2-stage"
+database_id = "94d4b13f-b0b9-4f2b-8b4c-0dc4a20b4868"
+migrations_dir = "migrations"

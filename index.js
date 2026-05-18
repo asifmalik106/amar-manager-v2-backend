@@ -1,15 +1,11 @@
-const serverless = require('serverless-http');
-const express = require("express");
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const app = express();
+const { Hono } = require('hono');
+const { cors } = require('hono/cors');
 const routes = require("./routes/index");
-app.use(cors({ origin: true}));
-app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(routes);
-app.all("*",(req,res)=>{
-    res.status(404).json({"status": "error", "msg": "404 Not Found"});
-});
 
-module.exports.handler = serverless(app);
+const app = new Hono();
+
+app.use('*', cors({ origin: '*' }));
+app.route('/', routes);
+app.all("*", (c) => c.json({ status: "error", msg: "404 Not Found" }, 404));
+
+module.exports = { fetch: app.fetch.bind(app) };

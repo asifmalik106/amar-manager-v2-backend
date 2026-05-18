@@ -1,285 +1,78 @@
-const AWS = require('aws-sdk');
-
 class DB {
-    constructor() {
-        // Initialize the dynamoDB DocumentClient
-        this.dynamoDB = new AWS.DynamoDB.DocumentClient();
+    constructor(d1) {
+        this.d1 = d1;
     }
 
-    // Get all data from a table
-    async getAllDatabaseData(tableName) {
-        const params = {
-            TableName: tableName
-        };
-
-        try {
-            const data = await this.dynamoDB.scan(params).promise();
-            return data.Items;
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    // Get all data from a specific table (alias for getAllDatabaseData)
     async getAllData(tableName) {
-        return await this.getAllDatabaseData(tableName);
+        const result = await this.d1.prepare(`SELECT * FROM ${tableName}`).all();
+        return result.results;
     }
 
-    // Get data by ID
-    async getDataById(dataId, tableName) {
-        const params = {
-            TableName: tableName,
-            IndexName: 'id-index', // Ensure the table has a GSI on 'id'
-            KeyConditionExpression: "#id = :id",
-            ExpressionAttributeNames: {
-                "#id": "id"
-            },
-            ExpressionAttributeValues: {
-                ":id": dataId
-            }
-        };
-
-        try {
-            const data = await this.dynamoDB.query(params).promise();
-            return data.Items;
-        } catch (error) {
-            throw error;
-        }
+    async getDataById(id, tableName) {
+        const result = await this.d1
+            .prepare(`SELECT * FROM ${tableName} WHERE id = ?`)
+            .bind(id)
+            .all();
+        return result.results;
     }
 
-    // Get data by type
     async getDataByType(dataType, tableName) {
-        const params = {
-            TableName: tableName,
-            IndexName: 'type-index', // Ensure the table has a GSI on 'type'
-            KeyConditionExpression: "#type = :type",
-            ExpressionAttributeNames: {
-                "#type": "type"
-            },
-            ExpressionAttributeValues: {
-                ":type": dataType
-            }
-        };
-
-        try {
-            const data = await this.dynamoDB.query(params).promise();
-            return data.Items;
-        } catch (error) {
-            throw error;
-        }
+        const result = await this.d1
+            .prepare(`SELECT * FROM ${tableName} WHERE type = ?`)
+            .bind(dataType)
+            .all();
+        return result.results;
     }
 
-    // Create new data entry
-    async create(data, TableName) {
-        const params = {
-            TableName: TableName,
-            Item: data,
-        };
-
-        try {
-           let result = await this.dynamoDB.put(params).promise();
-           return result;
-        } catch (error) {
-            throw TableName+" "+error;
-        }
+    async create(data, tableName) {
+        const keys = Object.keys(data);
+        const placeholders = keys.map(() => '?').join(', ');
+        const values = keys.map(k => data[k]);
+        const sql = `INSERT INTO ${tableName} (${keys.join(', ')}) VALUES (${placeholders})`;
+        return await this.d1.prepare(sql).bind(...values).run();
     }
 
-    async count(data, tableName, indexName){
-
-        // Query the GSI to check for uniqueness
-        const checkParams = {
-            TableName: tableName,
-            IndexName: indexName, // GSI name
-            KeyConditionExpression: '#attr = :data',
-            ExpressionAttributeNames: {
-              '#attr': data.attribute // Map the attribute name
-            },
-            ExpressionAttributeValues: {
-              ':data': data.value // Map the value
-            }
-          };
-        try {
-            let result = await this.dynamoDB.query(checkParams).promise();
-            return result.Count;
-         } catch (error) {
-             throw error;
-        }
+    async count(data, tableName) {
+        const result = await this.d1
+            .prepare(`SELECT COUNT(*) as count FROM ${tableName} WHERE ${data.attribute} = ?`)
+            .bind(data.value)
+            .first();
+        return result ? result.count : 0;
     }
 
-
-    // Get All Entities
-    async getAllEntities(tableName, entityName) {
-        const params = {
-            TableName: tableName,
-            KeyConditionExpression: 'primary_key = :entityName',
-            ExpressionAttributeValues: {
-                ':entityName': entityName
-            }
-        };
-    
-        try {
-        const result = await this.dynamoDB.query(params).promise();
-        return result
-        }catch (error){
-            throw error
-        }
+    async getAllEntities(tableName) {
+        const result = await this.d1.prepare(`SELECT * FROM ${tableName}`).all();
+        return result.results;
     }
 
-    // Get Single Entity By ID
-    async getEntityByID(tableName, entityName, entityID) {
-        const params = {
-            TableName: tableName,
-            KeyConditionExpression: 'primary_key = :entityName and sort_key = :entityID',
-            ExpressionAttributeValues: {
-                ':entityName': entityName,
-                ':entityID': entityID
-            }
-        };
-    
-        try {
-            const result = await this.dynamoDB.query(params).promise();
-            return result
-        }catch (error){
-            throw error
-        }
+    async getEntityByID(tableName, entityID) {
+        return await this.d1
+            .prepare(`SELECT * FROM ${tableName} WHERE id = ?`)
+            .bind(entityID)
+            .first();
     }
 
-    // Update data by ID
-    /*
-        updateData = {
-            "primary_key": PRIMARY_KEY,
-            "sort_key": SORT_KEY,
-            "data":[
-                {
-                    "name": ATTRIBUTE_NAME,
-                    "value": ATTRIBUTE_VALUE
-                },
-                {
-                    "name": ATTRIBUTE_NAME,
-                    "value": ATTRIBUTE_VALUE
-                },
-            ]
-        }
-    */
-        async updateEntity(tableName, updateData) {
-            // Initialize update expression and attribute values
-            let updateExpression = 'SET ';
-            let expressionAttributeValues = {};
-            let expressionAttributeNames = {};
-        
-            // Build dynamic update expression and attribute values
-            updateData.data.forEach((item, index) => {
-                const attributePlaceholder = `:value${index}`;
-                const namePlaceholder = `#name${index}`;
-        
-                // Append to update expression
-                updateExpression += `${index > 0 ? ', ' : ''}${namePlaceholder} = ${attributePlaceholder}`;
-        
-                // Add value to expression attribute values
-                expressionAttributeValues[attributePlaceholder] = item.value;
-        
-                // Add attribute name to avoid reserved keyword conflicts
-                expressionAttributeNames[namePlaceholder] = item.name;
-            });
-        
-            const params = {
-                TableName: tableName,
-                Key: {
-                    primary_key: updateData.primary_key, // Partition Key
-                    sort_key: updateData.sort_key         // Sort Key
-                },
-                UpdateExpression: updateExpression,
-                ExpressionAttributeValues: expressionAttributeValues,
-                ExpressionAttributeNames: expressionAttributeNames,
-                ReturnValues: 'UPDATED_NEW' // Returns the updated attributes
-            };
-        
-            try {
-                const result = await this.dynamoDB.update(params).promise();
-                console.log(`Entity updated successfully:`, result.Attributes);
-                return result.Attributes; // Return updated attributes
-            } catch (error) {
-                console.error('Error updating entity:', error);
-                throw error;
-            }
-        }
-        
-
-    // Update data by date
-    async updateDataByDate(tableName, date, newData) {
-        if (!date) {
-            throw new Error('Data date is required');
-        }
-
-        const params = {
-            TableName: tableName,
-            IndexName: 'date-index', // Ensure the table has a GSI on 'date'
-            KeyConditionExpression: "#date = :date",
-            ExpressionAttributeNames: {
-                "#date": "date"
-            },
-            ExpressionAttributeValues: {
-                ":date": date
-            }
-        };
-
-        try {
-            const data = await this.dynamoDB.query(params).promise();
-            if (data.Items.length === 0) {
-                throw new Error('Data not found');
-            }
-            const key = data.Items[0].id; // assuming 'id' is a primary key
-            return await this.update(key, newData, tableName);
-        } catch (error) {
-            throw error;
-        }
+    // updates: [{ name, value }, ...]
+    async updateEntity(tableName, id, updates) {
+        const setClause = updates.map(item => `${item.name} = ?`).join(', ');
+        const values = [...updates.map(item => item.value), id];
+        const sql = `UPDATE ${tableName} SET ${setClause}, updated_at = CURRENT_TIMESTAMP WHERE id = ?`;
+        return await this.d1.prepare(sql).bind(...values).run();
     }
 
-    // Delete data by ID
-    async deleteById(dataId, tableName) {
-        if (!dataId) {
-            throw new Error('Data ID is required');
-        }
-
-        const params = {
-            TableName: tableName,
-            Key: { id: dataId }  // Assuming 'id' is the primary key
-        };
-
-        try {
-            await this.dynamoDB.delete(params).promise();
-        } catch (error) {
-            throw error;
-        }
+    async deleteById(id, tableName) {
+        if (!id) throw new Error('ID is required');
+        await this.d1.prepare(`DELETE FROM ${tableName} WHERE id = ?`).bind(id).run();
     }
 
-    async countAndIncrement(itemName, tableName) {
-        const params = {
-          TableName: tableName,
-          Key: {
-            primary_key: 'metadata',
-            sort_key: itemName
-          },
-          UpdateExpression: 'SET #count = if_not_exists(#count, :start) + :inc',
-          ExpressionAttributeNames: {
-            '#count': 'count'
-          },
-          ExpressionAttributeValues: {
-            ':start': 0,
-            ':inc': 1
-          },
-          ReturnValues: 'UPDATED_NEW'
-        };
-      
-        try {
-          const result = await this.dynamoDB.update(params).promise();
-          console.log(`Updated customer count: ${result.Attributes.count}`);
-          return result.Attributes.count;
-        } catch (error) {
-          console.error('Error incrementing customer count:', error);
-          throw error;
-        }
-      }
+    async updateDataByDate(tableName, date, updates) {
+        const row = await this.d1
+            .prepare(`SELECT * FROM ${tableName} WHERE date = ? LIMIT 1`)
+            .bind(date)
+            .first();
+        if (!row) throw new Error('Data not found');
+        return await this.updateEntity(tableName, row.id, updates);
+    }
 }
 
 module.exports = DB;

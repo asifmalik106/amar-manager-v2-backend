@@ -1,15 +1,14 @@
-function authenticateToken(req, res, next)
-{
-    next();
-    // let token = req.headers["authorization-token"];
-
-    // firebaseAdmin.getAuth().verifyIdToken(token).then((decodedToken) => {
-    //     next();
-    // })
-    // .catch((error) => {
-    //     res.status(500).json("User not authenticated. "+error);
-    // });
-
+async function authenticateToken(c, next) {
+    await next();
+    // const token = c.req.header('authorization-token');
+    // Implement token verification here when ready:
+    // try {
+    //     const decodedToken = await verifyToken(token);
+    //     c.set('user', decodedToken);
+    //     await next();
+    // } catch (error) {
+    //     return c.json({ status: "error", msg: "User not authenticated. " + error }, 500);
+    // }
 }
 
 module.exports = authenticateToken;

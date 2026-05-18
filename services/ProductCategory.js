@@ -1,87 +1,62 @@
 let CategoryModel = require("../models/ProductCategoryModel");
-let uuid = require("uuid");
-class ProductCategory 
-{
-    entityPrefix = "ProductCategory"
+
+class ProductCategory {
+    entityPrefix = "ProductCategory";
+    #db;
     #categoryName;
     #categoryUnit;
-    constructor(categoryName, categoryUnit)
-    {
+
+    constructor(db, categoryName, categoryUnit) {
+        this.#db = db;
         this.#categoryName = categoryName;
         this.#categoryUnit = categoryUnit;
     }
-    get categoryName()
-    {
-        return this.#categoryName;
-    }
-    set categoryName(value)
-    {
-        this.#categoryName = value;
-    }
-    get categoryUnit()
-    {
-        return this.#categoryUnit;
-    }
-    set categoryUnit(value)
-    {
-        this.#categoryUnit = value;
-    }
 
-    async create()
-    {
-        let categoryModel = new CategoryModel();
-        let sameCount = await categoryModel.countDuplicate({attribute: "categoryName", value: this.#categoryName},"categoryName-index")
-        if(sameCount>0){
-            throw "Duplicate Entry"
+    get categoryName() { return this.#categoryName; }
+    set categoryName(value) { this.#categoryName = value; }
+    get categoryUnit() { return this.#categoryUnit; }
+    set categoryUnit(value) { this.#categoryUnit = value; }
+
+    async create() {
+        let categoryModel = new CategoryModel(this.#db);
+        let sameCount = await categoryModel.countDuplicate({ attribute: "categoryName", value: this.#categoryName });
+        if (sameCount > 0) {
+            throw "Duplicate Entry";
         }
-        let count = await categoryModel.count();
         let newCategory = {
-            primary_key: "ProductCategory",
-            sort_key: "ProductCategory#"+count,
             categoryName: this.#categoryName,
             categoryUnit: this.#categoryUnit
         };
         return await categoryModel.create(newCategory);
     }
 
-    static async getAll(){
-        let categoryModel = new CategoryModel();
-        let result = await categoryModel.getAll();
-        return result;
+    static async getAll(db) {
+        let categoryModel = new CategoryModel(db);
+        return await categoryModel.getAll();
     }
 
-    async getProductCategoryByID(productCategoryID){
-        let categoryModel = new CategoryModel();
+    async getProductCategoryByID(productCategoryID) {
+        let categoryModel = new CategoryModel(this.#db);
         let category = await categoryModel.getProductCategoryByID(productCategoryID);
-        if(category.Count==0){
+        if (!category) {
             throw "Wrong Category ID";
         }
         return category;
     }
 
-    async update(key)
-    {
-        let categoryModel = new CategoryModel();
-        let sameCount = await categoryModel.countDuplicate({attribute: "categoryName", value: this.#categoryName},"categoryName-index")
-        if(sameCount>0){
-            throw "Duplicate Entry"
+    async update(key) {
+        let categoryModel = new CategoryModel(this.#db);
+        let sameCount = await categoryModel.countDuplicate({ attribute: "categoryName", value: this.#categoryName });
+        if (sameCount > 0) {
+            throw "Duplicate Entry";
         }
-        console.log("ProductCategory:" + this.#categoryName + " " + this.#categoryUnit)
         let updateCategory = {
-            primary_key: "ProductCategory",
-            sort_key: "ProductCategory#"+key,
-            data: 
-            [
-                {
-                    name: "categoryName",
-                    value: this.#categoryName
-                },
-                {
-                    name: "categoryUnit",
-                    value: this.#categoryUnit
-                }
+            id: key,
+            data: [
+                { name: "categoryName", value: this.#categoryName },
+                { name: "categoryUnit", value: this.#categoryUnit }
             ]
-        }
+        };
         return await categoryModel.update(updateCategory);
     }
 }

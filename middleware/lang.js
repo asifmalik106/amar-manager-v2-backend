@@ -1,15 +1,9 @@
-function langToken(req, res, next)
-{
-    let lang = req.headers["lang"];
-
-    if(lang!="bn")
-    {
-        return res.status(401).json({ status: "error", msg: "Unauthorized" })
+async function langToken(c, next) {
+    let lang = c.req.header('lang');
+    if (lang !== "bn") {
+        return c.json({ status: "error", msg: "Unauthorized" }, 401);
     }
-    else
-    {
-        next();
-    }
+    await next();
 }
 
 module.exports = langToken;
